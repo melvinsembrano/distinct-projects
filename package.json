@@ -1,21 +1,40 @@
 {
   "name": "distinct-projects",
   "displayName": "Distinct Projects",
-  "description": "Distinct Projects lets you assign a custom title bar color to each workspace or folder in VS Code. No more guessing which project you're in when you have multiple windows open.",
+  "description": "Make every project visually unique at a glance. Assign custom title bar colors to each workspace.",
   "version": "0.0.1",
+  "publisher": "your-publisher-name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/distinct-projects"
+  },
   "engines": {
-    "vscode": "^1.106.1"
+    "vscode": "^1.85.0"
   },
   "categories": [
+    "Themes",
     "Other"
   ],
-  "activationEvents": [],
+  "keywords": [
+    "titlebar",
+    "color",
+    "workspace",
+    "theme",
+    "visual",
+    "project"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "distinct-projects.helloWorld",
-      "title": "Hello World"
-    }]
+    "commands": [
+      {
+        "command": "distinct-projects.chooseTitleBarColor",
+        "title": "Distinct Projects: Choose Title Bar Color"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",

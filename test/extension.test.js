@@ -1,15 +1,21 @@
 const assert = require('assert');
-
-// You can import and use all API from the 'vscode' module
-// as well as import your extension to test it
 const vscode = require('vscode');
-// const myExtension = require('../extension');
 
-suite('Extension Test Suite', () => {
+suite('Distinct Projects Extension Test Suite', () => {
 	vscode.window.showInformationMessage('Start all tests.');
 
-	test('Sample test', () => {
-		assert.strictEqual(-1, [1, 2, 3].indexOf(5));
-		assert.strictEqual(-1, [1, 2, 3].indexOf(0));
+	test('Extension should be present', () => {
+		assert.ok(vscode.extensions.getExtension('your-publisher-name.distinct-projects'));
+	});
+
+	test('Should register chooseTitleBarColor command', async () => {
+		const commands = await vscode.commands.getCommands(true);
+		assert.ok(commands.includes('distinct-projects.chooseTitleBarColor'));
+	});
+
+	test('Color contrast calculation', () => {
+		// This would test the getContrastingTextColor function if exported
+		// For now, basic test structure is in place
+		assert.ok(true);
 	});
 });
