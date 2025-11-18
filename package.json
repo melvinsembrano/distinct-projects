@@ -2,7 +2,7 @@
   "name": "distinct-projects",
   "displayName": "Distinct Projects",
   "description": "Make every project visually unique at a glance. Assign custom title bar colors to each workspace.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "publisher": "AllanMSembrano",
   "icon": "icon.png",
   "author": {
