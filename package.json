@@ -16,7 +16,7 @@
     "url": "https://github.com/melvinsembrano/distinct-projects"
   },
   "engines": {
-    "vscode": "^1.85.0"
+    "vscode": "^1.106.1"
   },
   "categories": [
     "Themes",
