@@ -3,11 +3,17 @@
   "displayName": "Distinct Projects",
   "description": "Make every project visually unique at a glance. Assign custom title bar colors to each workspace.",
   "version": "0.0.1",
-  "publisher": "your-publisher-name",
+  "publisher": "AllanMSembrano",
+  "icon": "icon.png",
+  "author": {
+    "name": "Allan M Sembrano",
+    "email": "melv@hey.com",
+    "url": "https://github.com/melvinsembrano"
+  },
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/distinct-projects"
+    "url": "https://github.com/melvinsembrano/distinct-projects"
   },
   "engines": {
     "vscode": "^1.85.0"
