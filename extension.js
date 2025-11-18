@@ -30,19 +30,51 @@ function activate(context) {
 			const config = vscode.workspace.getConfiguration();
 			const currentColor = config.get('workbench.colorCustomizations')?.['titleBar.activeBackground'] || '#007ACC';
 
-			// Show color picker
-			const color = await vscode.window.showInputBox({
-				prompt: 'Enter a color for the title bar (hex format, e.g., #FF5733)',
-				value: currentColor,
-				placeHolder: '#007ACC',
-				validateInput: (value) => {
-					if (!value) return 'Color is required';
-					if (!/^#[0-9A-Fa-f]{6}$/.test(value)) {
-						return 'Please enter a valid hex color (e.g., #FF5733)';
-					}
-					return null;
-				}
+			// Predefined color palette
+			const colorPresets = [
+				{ label: '$(symbol-color) Blue', description: '#007ACC', color: '#007ACC' },
+				{ label: '$(symbol-color) Purple', description: '#663399', color: '#663399' },
+				{ label: '$(symbol-color) Green', description: '#28A745', color: '#28A745' },
+				{ label: '$(symbol-color) Red', description: '#DC3545', color: '#DC3545' },
+				{ label: '$(symbol-color) Orange', description: '#FD7E14', color: '#FD7E14' },
+				{ label: '$(symbol-color) Teal', description: '#20C997', color: '#20C997' },
+				{ label: '$(symbol-color) Pink', description: '#E83E8C', color: '#E83E8C' },
+				{ label: '$(symbol-color) Indigo', description: '#6610F2', color: '#6610F2' },
+				{ label: '$(symbol-color) Yellow', description: '#FFC107', color: '#FFC107' },
+				{ label: '$(symbol-color) Cyan', description: '#17A2B8', color: '#17A2B8' },
+				{ label: '$(symbol-color) Dark Gray', description: '#343A40', color: '#343A40' },
+				{ label: '$(symbol-color) Lime', description: '#82C91E', color: '#82C91E' },
+				{ label: '$(symbol-color) Current: ' + currentColor, description: currentColor, color: currentColor },
+				{ label: '$(edit) Custom Color...', description: 'Enter a hex color code', color: null }
+			];
+
+			// Show quick pick
+			const selected = await vscode.window.showQuickPick(colorPresets, {
+				placeHolder: 'Choose a title bar color or select Custom Color to enter hex code',
+				matchOnDescription: true
 			});
+
+			if (!selected) {
+				return;
+			}
+
+			let color = selected.color;
+
+			// If custom color selected, show input box
+			if (color === null) {
+				color = await vscode.window.showInputBox({
+					prompt: 'Enter a color for the title bar (hex format, e.g., #FF5733)',
+					value: currentColor,
+					placeHolder: '#007ACC',
+					validateInput: (value) => {
+						if (!value) return 'Color is required';
+						if (!/^#[0-9A-Fa-f]{6}$/i.test(value)) {
+							return 'Please enter a valid hex color (e.g., #FF5733)';
+						}
+						return null;
+					}
+				});
+			}
 
 			if (color) {
 				await applyTitleBarColor(color);
