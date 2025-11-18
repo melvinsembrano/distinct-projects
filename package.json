@@ -16,7 +16,7 @@
     "url": "https://github.com/melvinsembrano/distinct-projects"
   },
   "engines": {
-    "vscode": "^1.106.1"
+    "vscode": "^1.88.0"
   },
   "categories": [
     "Themes",
@@ -48,7 +48,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.106.1",
+    "@types/vscode": "^1.88.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "eslint": "^9.39.1",
