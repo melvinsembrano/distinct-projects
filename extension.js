@@ -49,9 +49,9 @@ function activate(context) {
 			let color = null;
 
 			if (mainChoice.action === 'palette') {
-				color = await showColorPalette();
+				color = await showColorPalette(currentColor);
 			} else if (mainChoice.action === 'presets') {
-				color = await showPresetColors();
+				color = await showPresetColors(currentColor);
 			} else if (mainChoice.action === 'custom') {
 				color = await showCustomColorInput(currentColor);
 			} else if (mainChoice.action === 'current') {
@@ -71,9 +71,10 @@ function activate(context) {
 
 /**
  * Show color palette with a wide range of colors
+ * @param {string} originalColor - Original color to restore on cancel
  * @returns {Promise<string|null>}
  */
-async function showColorPalette() {
+async function showColorPalette(originalColor) {
 	const palette = [
 		// Reds
 		{ label: '$(circle-filled) Deep Red', description: '#8B0000', color: '#8B0000' },
@@ -154,19 +155,46 @@ async function showColorPalette() {
 		{ label: '$(circle-filled) Light Gray', description: '#D3D3D3', color: '#D3D3D3' }
 	];
 
-	const selected = await vscode.window.showQuickPick(palette, {
-		placeHolder: 'Choose a color from the palette',
-		matchOnDescription: true
-	});
+	const quickPick = vscode.window.createQuickPick();
+	quickPick.placeholder = 'Choose a color from the palette (live preview)';
+	quickPick.matchOnDescription = true;
+	quickPick.items = palette;
 
-	return selected ? selected.color : null;
+	return new Promise((resolve) => {
+		// Preview color on selection change
+		quickPick.onDidChangeActive(async (items) => {
+			if (items.length > 0 && items[0].color) {
+				await applyTitleBarColor(items[0].color);
+			}
+		});
+
+		// Handle accept (Enter key)
+		quickPick.onDidAccept(() => {
+			const selected = quickPick.activeItems[0];
+			quickPick.hide();
+			resolve(selected ? selected.color : null);
+		});
+
+		// Handle cancel (Escape key)
+		quickPick.onDidHide(() => {
+			if (quickPick.selectedItems.length === 0) {
+				// Restore original color if cancelled
+				applyTitleBarColor(originalColor).then(() => {
+					resolve(null);
+				});
+			}
+		});
+
+		quickPick.show();
+	});
 }
 
 /**
  * Show preset colors
+ * @param {string} originalColor - Original color to restore on cancel
  * @returns {Promise<string|null>}
  */
-async function showPresetColors() {
+async function showPresetColors(originalColor) {
 	const presets = [
 		{ label: '$(symbol-color) Blue', description: '#007ACC', color: '#007ACC' },
 		{ label: '$(symbol-color) Purple', description: '#663399', color: '#663399' },
@@ -182,12 +210,38 @@ async function showPresetColors() {
 		{ label: '$(symbol-color) Lime', description: '#82C91E', color: '#82C91E' }
 	];
 
-	const selected = await vscode.window.showQuickPick(presets, {
-		placeHolder: 'Choose a preset color',
-		matchOnDescription: true
-	});
+	const quickPick = vscode.window.createQuickPick();
+	quickPick.placeholder = 'Choose a preset color (live preview)';
+	quickPick.matchOnDescription = true;
+	quickPick.items = presets;
 
-	return selected ? selected.color : null;
+	return new Promise((resolve) => {
+		// Preview color on selection change
+		quickPick.onDidChangeActive(async (items) => {
+			if (items.length > 0 && items[0].color) {
+				await applyTitleBarColor(items[0].color);
+			}
+		});
+
+		// Handle accept (Enter key)
+		quickPick.onDidAccept(() => {
+			const selected = quickPick.activeItems[0];
+			quickPick.hide();
+			resolve(selected ? selected.color : null);
+		});
+
+		// Handle cancel (Escape key)
+		quickPick.onDidHide(() => {
+			if (quickPick.selectedItems.length === 0) {
+				// Restore original color if cancelled
+				applyTitleBarColor(originalColor).then(() => {
+					resolve(null);
+				});
+			}
+		});
+
+		quickPick.show();
+	});
 }
 
 /**
